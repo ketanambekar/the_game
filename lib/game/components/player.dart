@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:the_game/core/game_config.dart';
@@ -34,23 +33,50 @@ class Player extends SpriteAnimationComponent with HasGameRef {
   Future<void> onLoad() async {
     _spriteImage = await gameRef.images.load(Img.bandit);
 
-    idleAnimation = SpriteAnimation.fromFrameData(
-      _spriteImage,
-      SpriteAnimationData.sequenced(
-        amount: 4,
-        stepTime: 0.15,
-        textureSize: Vector2(90, 90),
+    final frames = [
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(0, 0),
       ),
-    );
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(80, 0),
+      ),
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(80, 0),
+      ),
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(80, 0),
+      ),
+    ];
 
-    walkAnimation = SpriteAnimation.fromFrameData(
-      _spriteImage,
-      SpriteAnimationData.sequenced(
-        amount: 6,
-        stepTime: 0.10,
-        textureSize: Vector2(90, 90),
+    idleAnimation = SpriteAnimation.spriteList(frames, stepTime: 0.15);
+
+    final walkFrames = [
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(0, 0),
       ),
-    );
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(400, 0),
+      ),
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(480, 0),
+      ),
+    ];
+
+    walkAnimation = SpriteAnimation.spriteList(walkFrames, stepTime: 0.10);
 
     runAnimation = SpriteAnimation.fromFrameData(
       _spriteImage,
@@ -61,14 +87,27 @@ class Player extends SpriteAnimationComponent with HasGameRef {
       ),
     );
 
-    jumpAnimation = SpriteAnimation.fromFrameData(
-      _spriteImage,
-      SpriteAnimationData.sequenced(
-        amount: 2,
-        stepTime: 0.20,
-        textureSize: Vector2(90, 90),
+    final jumpFrames = [
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(160, 480),
       ),
-    );
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(160, 480),
+      ),
+      Sprite(
+        _spriteImage,
+        srcSize: Vector2(80, 80),
+        srcPosition: Vector2(160, 480),
+      ),
+
+
+
+    ];
+    jumpAnimation = SpriteAnimation.spriteList(jumpFrames, stepTime: 0.10);
 
     // Store punch animation template data
     _punchAnimationData = SpriteAnimationData.sequenced(
@@ -78,7 +117,10 @@ class Player extends SpriteAnimationComponent with HasGameRef {
       loop: false,
     );
 
-    punchAnimation = SpriteAnimation.fromFrameData(_spriteImage, _punchAnimationData);
+    punchAnimation = SpriteAnimation.fromFrameData(
+      _spriteImage,
+      _punchAnimationData,
+    );
 
     defendAnimation = SpriteAnimation.fromFrameData(
       _spriteImage,
@@ -122,7 +164,10 @@ class Player extends SpriteAnimationComponent with HasGameRef {
     if (!_isPunching) {
       state = PlayerState.punch;
       _isPunching = true;
-      animation = SpriteAnimation.fromFrameData(_spriteImage, _punchAnimationData);
+      animation = SpriteAnimation.fromFrameData(
+        _spriteImage,
+        _punchAnimationData,
+      );
     }
   }
 
